@@ -1,0 +1,24 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "primer trabajo",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aleoferdie/webapp.git"
+  },
+  "author": "orbaiceta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aleoferdie/webapp/issues"
+  },
+  "homepage": "https://github.com/Aleoferdie/webapp#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "pug": "^2.0.2",
+    "socket.io": "^2.0.4"
+  }
+}
