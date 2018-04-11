@@ -3,11 +3,37 @@
 var socket = io.connect();
 
 socket.on('connect', function(datos) {
-	//$('#estado').html('Te has conectado al chat');
-	nickname = prompt('Cual es tu nickname?');
-	socket.emit('unir', nickname);
+	nickname = null;
+	while (nickname == null || nickname == '' || nickname == undefined){
+		nickname = prompt('Introduce tu nickname');
+	}
+	socket.emit('comprueba usuario',nickname);
+});
+
+socket.on('usuario erroneo', function(datos) {
+	nickname = null;
+	while (nickname == null || nickname == '' || nickname == undefined){
+		
+		nickname = prompt('El nickname que ha escogido no está libre. Escoja otro por favor.');
+	}
+	socket.emit('comprueba usuario',nickname);
+});
+
+// En caso de nickname correcto
+socket.on('usuario ok',function(nickname){
+	socket.emit('unir',nickname);
 	socket.nickname = nickname;
-	console.log(socket.nickname);
+	$('#id').text(nickname);
+});
+
+socket.on('reconnect',function(nickname){
+	socket.emit('reconecta',nickname);
+	socket.nickname = nickname;
+	$('#id').text(nickname);
+});
+
+socket.on('sala llena', function(datos) {  // Se alcanza el número máximo de usuarios en la sala.
+	$('#contenido').html('<p>La sala del chat está llena.</p>');
 });
 
 socket.on('mensajeschat', function(datos) {
@@ -25,18 +51,3 @@ $(document).ready(function() {
 		$('#comment').val('');
 	});
 });
-
-socket.on('unir', function(nombre) {
-	//alert('Se ha unido ' + nombre);
-	$(document).ready(function() {
-		$('#chatarea').append('<span class="mx-2">Se ha unido '  + nombre + '<br>');
-	});
-});
-
-socket.on('borrar usuario', function(nombre) {
-	//alert('Se ha desconectado el usuario ' + nombre);
-	$(document).ready(function() {
-		$('#chatarea').append('<span class="mx-2>"Se ha desconectado '  + nombre + '<br>');
-	});
-});
-

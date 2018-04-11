@@ -1,14 +1,51 @@
 doctype html
 html(lang="es")
   head
-    title Acerca de la empresa
+    // Required meta tags
     meta(charset="utf-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1")
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css")
-    script(src="jquery.js")
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    // Bootstrap CSS
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+    script(src="/socket.io/socket.io.js")
+    script(src="https://code.jquery.com/jquery-3.3.1.js")
+    script(src="clientio.js")
     link(rel="stylesheet" href="style.css")
+    title Chat de Alejandro, Santiago y Javier
   body
-    
+    .container-fluid
+      h1.my-3(align="center") Messenger
+        span#id
+      #contenido.row
+        .col-lg-9.col-xs-12
+          .form-group
+            label Historial
+            #chatarea.row
+          .input-group.mb-3
+            .input-group-append
+              a#emoji.btn.btn-outline-success(tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom") 😀
+            input#texto.form-control(type="textarea" name="mensaje" rows="2")
+            .input-group-append
+              button#boton.btn.btn-outline-success(type="button" rows="2") Enviar
+        .col-lg-2.col-xs-12
+          .form-group
+            label En línea
+            #users.row.users
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")
+    script.
+      $(function () {
+      $('.example-popover').popover({
+      container: 'body'
+      })
+      })
+      $(function () {
+      $('[data-toggle="popover"]').popover({html: true, content: '<div id="emojis" class="btn-group-xs"><button type="submit" class="btn btn-link btn-sm">😀</button><button type="submit" class="btn btn-link btn-sm">😃</button><button type="submit" class="btn btn-link btn-sm">😄</button><button type="submit" class="btn btn-link btn-sm">😁</button><button type="submit" class="btn btn-link btn-sm">😆</button><button type="submit" class="btn btn-link btn-sm">😅</button><button type="submit" class="btn btn-link btn-sm">😂</button><button type="submit" class="btn btn-link btn-sm">🤣</button><button type="submit" class="btn btn-link btn-sm">😊</button><button type="submit" class="btn btn-link btn-sm">😇</button><button type="submit" class="btn btn-link btn-sm">🙂</button><button type="submit" class="btn btn-link btn-sm">🙃</button><button type="submit" class="btn btn-link btn-sm">😉</button><button type="submit" class="btn btn-link btn-sm">😌</button><button type="submit" class="btn btn-link btn-sm">😍</button><button type="submit" class="btn btn-link btn-sm">😘</button><button type="submit" class="btn btn-link btn-sm">😗</button><button type="submit" class="btn btn-link btn-sm">😙</button><button type="submit" class="btn btn-link btn-sm">😚</button><button type="submit" class="btn btn-link btn-sm">😋</button><button type="submit" class="btn btn-link btn-sm">😛</button><button type="submit" class="btn btn-link btn-sm">😝</button><button type="submit" class="btn btn-link btn-sm">😜</button><button type="submit" class="btn btn-link btn-sm">🤓</button><button type="submit" class="btn btn-link btn-sm">😎</button><button type="submit" class="btn btn-link btn-sm">😏</button><button type="submit" class="btn btn-link btn-sm">😒</button><button type="submit" class="btn btn-link btn-sm">😞</button><button type="submit" class="btn btn-link btn-sm">😔</button><button type="submit" class="btn btn-link btn-sm">😟</button><button type="submit" class="btn btn-link btn-sm">😕</button><button type="submit" class="btn btn-link btn-sm">🙁</button><button type="submit" class="btn btn-link btn-sm">😣</button><button type="submit" class="btn btn-link btn-sm">😖</button><button type="submit" class="btn btn-link btn-sm">😫</button><button type="submit" class="btn btn-link btn-sm">😩</button><button type="submit" class="btn btn-link btn-sm">😢</button><button type="submit" class="btn btn-link btn-sm">😭</button><button type="submit" class="btn btn-link btn-sm">😤</button><button type="submit" class="btn btn-link btn-sm">😠</button><button type="submit" class="btn btn-link btn-sm">😡</button><button type="submit" class="btn btn-link btn-sm">😳</button><button type="submit" class="btn btn-link btn-sm">😱</button><button type="submit" class="btn btn-link btn-sm">😨</button><button type="submit" class="btn btn-link btn-sm">😰</button><button type="submit" class="btn btn-link btn-sm">😥</button><button type="submit" class="btn btn-link btn-sm">😓</button><button type="submit" class="btn btn-link btn-sm">🤗</button><button type="submit" class="btn btn-link btn-sm">🤔</button><button type="submit" class="btn btn-link btn-sm">🤥</button><button type="submit" class="btn btn-link btn-sm">😶</button><button type="submit" class="btn btn-link btn-sm">😐</button><button type="submit" class="btn btn-link btn-sm">😑</button><button type="submit" class="btn btn-link btn-sm">😬</button><button type="submit" class="btn btn-link btn-sm">🙄</button><button type="submit" class="btn btn-link btn-sm">😯</button><button type="submit" class="btn btn-link btn-sm">😦</button><button type="submit" class="btn btn-link btn-sm">😧</button><button type="submit" class="btn btn-link btn-sm">😮</button><button type="submit" class="btn btn-link btn-sm">😲</button><button type="submit" class="btn btn-link btn-sm">😴</button><button type="submit" class="btn btn-link btn-sm">🤤</button><button type="submit" class="btn btn-link btn-sm">😪</button><button type="submit" class="btn btn-link btn-sm">😵</button><button type="submit" class="btn btn-link btn-sm">🤐</button><button type="submit" class="btn btn-link btn-sm">🤢</button><button type="submit" class="btn btn-link btn-sm">🤧</button><button type="submit" class="btn btn-link btn-sm">😷</button><button type="submit" class="btn btn-link btn-sm">🤒</button><button type="submit" class="btn btn-link btn-sm">🤕</button><button type="submit" class="btn btn-link btn-sm">🤑</button><button type="submit" class="btn btn-link btn-sm">🤠</button><button type="submit" class="btn btn-link btn-sm">😈</button><button type="submit" class="btn btn-link btn-sm">👿</button><button type="submit" class="btn btn-link btn-sm"></div>'}).on('click',function(){
+      $(".btn-link").on("click",function(e){
+      $("#texto").val($('[data-toggle="popover"]').val()+""+$(this).text());
+      });
+      });
+      });
+      $('.popover-dismiss').popover({
+      trigger: 'focus'
+      });
+      $('#emoji').popover(options);
