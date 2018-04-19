@@ -309,7 +309,7 @@ io.on('connection', function(client) {
 			var mensajes = '';
 			var linea;
 			for (var i = 0; i < result.length; i++) {
-				if (result[i].nickname == nombre){
+				if (result[i].nickname == nombre){  // Si es el mensaje del usuario actual se muestra de manera distinta
 					if (result[i].fecha.getMinutes() < 10){
 						linea = '<div class="bg-light d-flex flex-row-reverse"><p class="text-right"><small>' +
 							  result[i].fecha.getHours() + ':0' + result[i].fecha.getMinutes() +
