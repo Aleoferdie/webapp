@@ -9,7 +9,7 @@ var MongoClient = require('mongodb').MongoClient;
 var database;
 var timer;
 var num_mensajes = 256;
-var t_inactive = 7000; // Tiempo en ms de inactividad.
+var t_inactive = 20000; // Tiempo en ms de inactividad.
 var uri = 'mongodb://Aleoferdie:choky666@webappchat-shard-00-00-cy3ua.mongodb.net:27017,webappchat-shard-00-01-cy3ua.mongodb.net:27017,webappchat-shard-00-02-cy3ua.mongodb.net:27017/test?ssl=true&replicaSet=WebappChat-shard-0&authSource=admin';
 
 MongoClient.connect(uri,function(err,db){
@@ -323,12 +323,12 @@ io.on('connection', function(client) {
 					if (result[i].fecha.getMinutes() < 10){
 						linea = '<div class="bg-light d-flex flex-row"><p class="text-left"><small>' +
 							  result[i].fecha.getHours() + ':0' + result[i].fecha.getMinutes() +
-							  '</p><p class="text-left"><b style="color:' + result[i].user[0].color +
+							  '</p><p class="text-left"><b style="color:' + result[i].user[i].color +
 							  ';">' + result[i].nickname + '</b>: ' + result[i].mensaje + '</small></p></div>';
 					} else {
 						linea = '<div class="bg-light d-flex flex-row"><p class="text-left"><small>' +
 							  result[i].fecha.getHours() + ':' + result[i].fecha.getMinutes() +
-							  '</p><p class="text-left"><b style="color:' + result[i].user[0].color +
+							  '</p><p class="text-left"><b style="color:' + result[i].user[i].color +
 							  ';">' + result[i].nickname + '</b>: ' + result[i].mensaje + '</small></p></div>';
 					}
 				}
