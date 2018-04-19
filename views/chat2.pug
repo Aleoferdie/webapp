@@ -1,0 +1,91 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+    link(href="jquery.cssemoticons.css" media="screen" rel="stylesheet" type="text/css")
+    script(src="jquery.cssemoticons.min.js" type="text/javascript")
+    script(src="/socket.io/socket.io.js")
+    script(src="https://code.jquery.com/jquery-3.3.1.js")
+    script(src="clientio.js")
+    style(type="text/css").
+      .relleno-area{
+      margin: 0em;
+      display: block;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+      padding-left: 0.1em;
+      padding-right: 0.1em;
+      }
+      .relleno-area p{
+      margin-left: 0.5em;
+      margin-right: 0.5em;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      padding-top: 0.1em;
+      padding-bottom: 0.1em;
+      margin-top: 0.1em;
+      margin-bottom: 0.1em;
+      }
+      #chatarea {
+      background-image: url('image.jpg');
+      }
+      #cajausers {
+      background: 'rgb(166, 166, 166)';
+      max-width: 100%;
+      }
+      #users {
+      padding-right: 5em;
+      }
+      #cajachat {
+      height: 800px;
+      overflow: scroll;
+      }
+      .popover{
+      max-width: 99%; /* Max Width of the popover (depending on the container!) */
+      }
+    title Chat de Alejandro, Santiago y Javier
+  body
+    audio#tone
+      source(src="stairs.mp3" type="audio/mpeg")
+      source(src="stairs.ogg" type="audio/ogg")
+      source(src="stairs.m4r" type="audio/m4r")  
+      |   Your browser does not support the audio element.
+    .container-fluid
+      nav.navbar.bg-primary.text-white 
+        h1.my-2 MESSENGER
+      #error.row
+        #cajachat.col-lg-8.col-xs-12.mx-1.my-3
+          .form-group
+            #chatarea.row.relleno-area
+          .input-group
+            div
+              a#emoji.btn.btn-outline-success(tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom") 😀
+            input#texto.form-control(type="textarea" placeholder="Escribe aquí")
+            div
+              button#botonfoto.btn.btn-outline-info(type="button") Foto
+            div
+              button#boton.btn.btn-outline-primary(type="button") Enviar  
+        #cajausers.col-lg-3.col-xs-12.mx-1.bg-light
+          #users.row.relleno-area
+          //div.my-3
+            button#desconectar.btn.btn-outline-danger(type="button") Desconectar  	
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")
+    script.
+      $(function () {
+      $('.example-popover').popover({
+      container: 'body'
+      })
+      })
+      $(function () {
+      $('[data-toggle="popover"]').popover({html: true, content: '<div id="emojis"><button class="btn btn-link btn-sm" type="submit">😀</button><button class="btn btn-link btn-sm" type="submit">😃</button><button class="btn btn-link btn-sm" type="submit">😄</button><button class="btn btn-link btn-sm" type="submit">😁</button><button class="btn btn-link btn-sm" type="submit">😆</button><button class="btn btn-link btn-sm" type="submit">😅</button><button class="btn btn-link btn-sm" type="submit">😂</button><button class="btn btn-link btn-sm" type="submit">🤣</button><button class="btn btn-link btn-sm" type="submit">😊</button><button class="btn btn-link btn-sm" type="submit">😇</button><button class="btn btn-link btn-sm" type="submit">🙂</button><button class="btn btn-link btn-sm" type="submit">🙃</button><button class="btn btn-link btn-sm" type="submit">😉</button><button class="btn btn-link btn-sm" type="submit">😌</button><button class="btn btn-link btn-sm" type="submit">😍</button><button class="btn btn-link btn-sm" type="submit">😘</button><button class="btn btn-link btn-sm" type="submit">😗</button><button class="btn btn-link btn-sm" type="submit">😙</button><button class="btn btn-link btn-sm" type="submit">😚</button><button class="btn btn-link btn-sm" type="submit">😋</button><button class="btn btn-link btn-sm" type="submit">😛</button><button class="btn btn-link btn-sm" type="submit">😝</button><button class="btn btn-link btn-sm" type="submit">😜</button><button class="btn btn-link btn-sm" type="submit">🤓</button><button class="btn btn-link btn-sm" type="submit">😎</button><button class="btn btn-link btn-sm" type="submit">😏</button><button class="btn btn-link btn-sm" type="submit">😒</button><button class="btn btn-link btn-sm" type="submit">😞</button><button class="btn btn-link btn-sm" type="submit">😔</button><button class="btn btn-link btn-sm" type="submit">😟</button><button class="btn btn-link btn-sm" type="submit">😕</button><button class="btn btn-link btn-sm" type="submit">🙁</button><button class="btn btn-link btn-sm" type="submit">😣</button><button class="btn btn-link btn-sm" type="submit">😖</button><button class="btn btn-link btn-sm" type="submit">😫</button><button class="btn btn-link btn-sm" type="submit">😩</button><button class="btn btn-link btn-sm" type="submit">😢</button><button class="btn btn-link btn-sm" type="submit">😭</button><button class="btn btn-link btn-sm" type="submit">😤</button><button class="btn btn-link btn-sm" type="submit">😠</button><button class="btn btn-link btn-sm" type="submit">😡</button><button class="btn btn-link btn-sm" type="submit">😳</button><button class="btn btn-link btn-sm" type="submit">😱</button><button class="btn btn-link btn-sm" type="submit">😨</button><button class="btn btn-link btn-sm" type="submit">😰</button><button class="btn btn-link btn-sm" type="submit">😥</button><button class="btn btn-link btn-sm" type="submit">😓</button><button class="btn btn-link btn-sm" type="submit">🤗</button><button class="btn btn-link btn-sm" type="submit">🤔</button><button class="btn btn-link btn-sm" type="submit">🤥</button><button class="btn btn-link btn-sm" type="submit">😶</button><button class="btn btn-link btn-sm" type="submit">😐</button><button class="btn btn-link btn-sm" type="submit">😑</button><button class="btn btn-link btn-sm" type="submit">😬</button><button class="btn btn-link btn-sm" type="submit">🙄</button><button class="btn btn-link btn-sm" type="submit">😯</button><button class="btn btn-link btn-sm" type="submit">😦</button><button class="btn btn-link btn-sm" type="submit">😧</button><button class="btn btn-link btn-sm" type="submit">😮</button><button class="btn btn-link btn-sm" type="submit">😲</button><button class="btn btn-link btn-sm" type="submit">😴</button><button class="btn btn-link btn-sm" type="submit">🤤</button><button class="btn btn-link btn-sm" type="submit">😪</button><button class="btn btn-link btn-sm" type="submit">😵</button><button class="btn btn-link btn-sm" type="submit">🤐</button><button class="btn btn-link btn-sm" type="submit">🤢</button><button class="btn btn-link btn-sm" type="submit">🤧</button><button class="btn btn-link btn-sm" type="submit">😷</button><button class="btn btn-link btn-sm" type="submit">🤒</button><button class="btn btn-link btn-sm" type="submit">🤕</button><button class="btn btn-link btn-sm" type="submit">🤑</button><button class="btn btn-link btn-sm" type="submit">🤠</button><button class="btn btn-link btn-sm" type="submit">😈</button><button class="btn btn-link btn-sm" type="submit">👿</button></div>'}).on('click',function(){
+      $(".btn-link").on("click",function(e){
+      $("#texto").val($('[data-toggle="popover"]').val()+""+$(this).text());
+      });
+      });
+      });
+      $('.popover-dismiss').popover({
+      trigger: 'focus'
+      });
