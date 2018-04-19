@@ -9,7 +9,7 @@ var MongoClient = require('mongodb').MongoClient;
 var database;
 var timer;
 var num_mensajes = 256;
-var t_inactive = 20000; // Tiempo en ms de inactividad.
+var t_inactive = 7000; // Tiempo en ms de inactividad.
 var uri = 'mongodb://Aleoferdie:choky666@webappchat-shard-00-00-cy3ua.mongodb.net:27017,webappchat-shard-00-01-cy3ua.mongodb.net:27017,webappchat-shard-00-02-cy3ua.mongodb.net:27017/test?ssl=true&replicaSet=WebappChat-shard-0&authSource=admin';
 
 MongoClient.connect(uri,function(err,db){
@@ -145,7 +145,7 @@ io.on('connection', function(client) {
 		}
 		client.emit('chatarea',mimensaje);
 		client.broadcast.emit('chatarea',mensaje);
-		client.broadcast.emit('tono',mensaje);
+		//client.broadcast.emit('tono',mensaje);
 		database.collection('mensajes').insertOne({nickname: datos.nickname, mensaje: datos.mensaje, fecha: fecha},
 													function(err,result){
 			if (err) {
@@ -192,7 +192,6 @@ io.on('connection', function(client) {
 			var now = new Date();
 			for (var i = 0; i < result.length; i++){
 				
-				if (result[i].online == false) {
 					var delta = now.getTime() - result[i].ultima.getTime(); // Devuelve los ms desde 1/1/1970
 					var delta_day = Math.floor(delta / (1000 * 60 * 60 * 24));
 
@@ -263,7 +262,6 @@ io.on('connection', function(client) {
 								ultima = 'hoy a las ' + result[i].ultima.getHours() + ':0' + result[i].ultima.getMinutes();
 						}
 					}
-				}
 
 				if (result[i].online == true){
 					if (result[i].escriendo == true) {
@@ -309,7 +307,7 @@ io.on('connection', function(client) {
 			var mensajes = '';
 			var linea;
 			for (var i = 0; i < result.length; i++) {
-				if (result[i].nickname == nombre){  // Si es el mensaje del usuario actual se muestra de manera distinta
+				if (result[i].nickname == nombre){
 					if (result[i].fecha.getMinutes() < 10){
 						linea = '<div class="bg-light d-flex flex-row-reverse"><p class="text-right"><small>' +
 							  result[i].fecha.getHours() + ':0' + result[i].fecha.getMinutes() +
@@ -323,12 +321,12 @@ io.on('connection', function(client) {
 					if (result[i].fecha.getMinutes() < 10){
 						linea = '<div class="bg-light d-flex flex-row"><p class="text-left"><small>' +
 							  result[i].fecha.getHours() + ':0' + result[i].fecha.getMinutes() +
-							  '</p><p class="text-left"><b style="color:' + result[i].user[i].color +
+							  '</p><p class="text-left"><b style="color:' + result[i].user[0].color +
 							  ';">' + result[i].nickname + '</b>: ' + result[i].mensaje + '</small></p></div>';
 					} else {
 						linea = '<div class="bg-light d-flex flex-row"><p class="text-left"><small>' +
 							  result[i].fecha.getHours() + ':' + result[i].fecha.getMinutes() +
-							  '</p><p class="text-left"><b style="color:' + result[i].user[i].color +
+							  '</p><p class="text-left"><b style="color:' + result[i].user[0].color +
 							  ';">' + result[i].nickname + '</b>: ' + result[i].mensaje + '</small></p></div>';
 					}
 				}

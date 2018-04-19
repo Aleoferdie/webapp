@@ -54,9 +54,9 @@ socket.on('chatarea',function(chatarea) {
 	$('#chatarea').append(chatarea);
 });
 
-socket.on('tono', function(datos) {
-	$('#tone').play();
-});
+//socket.on('tono', function(datos) {
+//	$('#tone').play();
+//});
 
 $(document).ready(function (){
 
@@ -95,11 +95,6 @@ $(document).ready(function (){
 	   		socket.emit('sin escribir',nickname);
 	   	}
 	});
-
-	//$('#desconectar').on('click', function(e) {
-	//	socket.emit('disconnect', nickname);
-	//	$('#texto').val('');
-	//});
 
 	$('#emoji').on('click',function(){
 		$('#emoji').val($('#texto').val());
