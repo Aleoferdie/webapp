@@ -152,17 +152,20 @@ io.on('connection', function(client) {
 				throw err;
 			}
 		});
-		database.collection('users').updateOne({nickname: datos.nickname},{$set: {ultima: fecha, escribiendo: false}},
+		database.collection('users').updateOne({nickname: datos.nickname},{$set: {escribiendo: false, ultima: fecha}},
 												function(err, result){ // Indicamos que el usuario ya no escribe
 			if (err) {
 				throw err;
 			}
+			listaUsuarios(datos.nickname);
+			console.log('Entro aqui');
 		});
+		
 	});
 
 	client.on('escribiendo', function(nombre){
 		var fecha = new Date();
-		database.collection('users').updateOne({nickname: nombre}, {$set: {escribiendo: true}},
+		database.collection('users').updateOne({nickname: nombre}, {$set: {escribiendo: true, ultima: fecha}},
 											   function(err,result){
 			if (err) {
 				throw err;
@@ -176,14 +179,14 @@ io.on('connection', function(client) {
 											   function(err,result){
 			if (err) {
 				throw err;
-			} else {
-				listaUsuarios(nombre);
 			}
+			listaUsuarios(nombre);
+			console.log(nombre);
 		});
 	});
 
 	function listaUsuarios(nombre){
-		database.collection('users').find().sort({online:-1}).toArray(function(err,result) {
+		database.collection('users').find().sort({online:1}).toArray(function(err,result) {
 			if (err) {
 				throw err;
 			}
@@ -191,7 +194,6 @@ io.on('connection', function(client) {
 			var ultima = '';
 			var now = new Date();
 			for (var i = 0; i < result.length; i++){
-				
 					var delta = now.getTime() - result[i].ultima.getTime(); // Devuelve los ms desde 1/1/1970
 					var delta_day = Math.floor(delta / (1000 * 60 * 60 * 24));
 
@@ -264,22 +266,19 @@ io.on('connection', function(client) {
 					}
 
 				if (result[i].online == true){
-					if (result[i].escriendo == true) {
-						if (result[i].nickname == nombre) {
-							var linea = '<p><b><i class="text-success"><small>' + result[i].nickname +
-							 	 		' (TÚ) está escribiendo...</small></i></b></p>'; // Indica quién eres en la lista de usuarios
-						} else {
-							var linea = '<p><i class="text-success"><small>' + result[i].nickname +
+					if (result[i].escribiendo == true) {
+						var linea = '<p><i class="text-success"><small>' + result[i].nickname +
 								  		' está escribiendo...</small></i></p>';
-						}
+						database.collection('users').updateOne({nickname: result[i].nickname},{$set: {escribiendo: false, ultima: now}},
+												function(err, result) {
+							if (err) {
+								throw err;
+							}
+							console.log('Escribiendo false');						
+						});		  	
 					} else {
-						if (result[i].nickname == nombre) {
-							var linea = '<p><b class="text-success"><small>' + result[i].nickname +
-							 	 		' (TÚ)</small></b></p>';
-						} else {
-							var linea = '<p class="text-success"><small>' + result[i].nickname +
-								  		'</small></p>';
-						}
+						var linea = '<p><b class="text-success"><small>' + result[i].nickname +
+							 	 		'</small></b></p>';
 					}
 				} else {
 					var linea = '<p class="text-muted"><small>' + result[i].nickname + ' (ult. vez ' + 

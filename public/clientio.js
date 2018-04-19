@@ -23,6 +23,7 @@ socket.on('nick ok',function(nickname) {
 
 socket.on('reconnect',function(nickname) {
 	socket.emit('reconnection',nickname);
+	socket.emit('sin escribir',nickname);
 	socket.nickname = nickname;
 	//alert('Bienvenido de vuelta!');
 });
@@ -86,10 +87,7 @@ $(document).ready(function (){
 				$('#texto').val('');
 			}
        	}
-	});
-
-	$('#texto').on('keypress', function(e) {
-		if ($('#texto').val() != '') {
+       	if (($('#texto').val() != '') || ($('#texto').val() != null) || ($('#texto').val() != undefined))  {
 			socket.emit('escribiendo',nickname);
 	   	} else {
 	   		socket.emit('sin escribir',nickname);
