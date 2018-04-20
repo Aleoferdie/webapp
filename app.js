@@ -50,11 +50,25 @@ io.on('connection', function(client) {
 					if (result[0] != undefined) { // Si da resultado es que el nickname está en la db.
 						if (result[0].online == true){   // Query con el nick introducido comprueba si online
 							client.emit('wrong nick');
-						} else {						// Si no está online se reconecta.	
-							client.emit('reconnect',nombre);
+						} else {	
+							database.collection('users').find({nickname: nombre}).toArray(function(err, result) {
+								if (err) {
+									throw err;
+								}
+								var col = result[0].color;
+							});					// Si no está online se reconecta.	
+							client.emit('reconnect',{nickname: nombre, color: col});
 						}
 					} else {
-						client.emit('nick ok',nombre);
+						var col = 'rgb(';
+						for (var i = 0; i < 3; i++){
+							if (i == 2){
+								col = col + '' + 10 * Math.floor((Math.random() * 20)) + ')';
+							} else {
+								col = col + '' + 10 * Math.floor((Math.random() * 20)) + ',';
+							}
+						}	
+						client.emit('nick ok',{nickname: nombre, color: col});
 					}
 				});
 			}
@@ -71,6 +85,7 @@ io.on('connection', function(client) {
 				col = col + '' + 10 * Math.floor((Math.random() * 20)) + ',';
 			}
 		}
+		client.color = col;
 		var fecha = new Date();
 		database.collection('users').insertOne({nickname: nombre, color: col, escribiendo: false, online: true, ultima: fecha},
 												function(err,result){
@@ -194,6 +209,7 @@ io.on('connection', function(client) {
 			var ultima = '';
 			var now = new Date();
 			for (var i = 0; i < result.length; i++){
+					var user = result[i];
 					var delta = now.getTime() - result[i].ultima.getTime(); // Devuelve los ms desde 1/1/1970
 					var delta_day = Math.floor(delta / (1000 * 60 * 60 * 24));
 
@@ -269,13 +285,13 @@ io.on('connection', function(client) {
 					if (result[i].escribiendo == true) {
 						var linea = '<p><i class="text-success"><small>' + result[i].nickname +
 								  		' está escribiendo...</small></i></p>';
-						database.collection('users').updateOne({nickname: result[i].nickname},{$set: {escribiendo: false, ultima: now}},
-												function(err, result) {
+						database.collection('users').updateOne({nickname: user.nickname},
+															   {$set: {escribiendo: false, ultima: now}},
+															   function(err, res) {
 							if (err) {
 								throw err;
-							}
-							console.log('Escribiendo false');						
-						});		  	
+							}						
+						});	  	
 					} else {
 						var linea = '<p><b class="text-success"><small>' + result[i].nickname +
 							 	 		'</small></b></p>';
