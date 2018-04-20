@@ -201,7 +201,7 @@ io.on('connection', function(client) {
 	});
 
 	function listaUsuarios(nombre){
-		database.collection('users').find().sort({online:1}).toArray(function(err,result) {
+		database.collection('users').find().sort({online:-1}).toArray(function(err,result) {
 			if (err) {
 				throw err;
 			}
